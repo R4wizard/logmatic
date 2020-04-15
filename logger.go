@@ -33,8 +33,9 @@ func (l *Logger) now() string {
 }
 
 func (l *Logger) log(level string, format string, a ...interface{}) {
+	dateColor := color.New(color.FgWhite, color.Bold).SprintfFunc()
 	printf("%s %s (%s) %s\n",
-		color.CyanString(l.now()),
+		dateColor(l.now()),
 		level,
 		l.name,
 		fmt.Sprintf(format, a...))
