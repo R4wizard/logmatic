@@ -17,6 +17,7 @@ type logFunc func(a ...interface{}) string
 // Logger maintains a set of logging functions
 // and has a log level that can be modified dynamically
 type Logger struct {
+	name        string
 	level       LogLevel
 	trace       logFunc
 	debug       logFunc
@@ -32,16 +33,22 @@ func (l *Logger) now() string {
 }
 
 func (l *Logger) log(level string, format string, a ...interface{}) {
-	printf("%s %s %s %s\n",
+	printf("%s %s %s %s %s\n",
 		color.MagentaString(l.now()),
 		level,
 		color.MagentaString("=>"),
+		l.name,
 		fmt.Sprintf(format, a...))
 }
 
 // SetLevel updates the logging level for future logs
 func (l *Logger) SetLevel(level LogLevel) {
 	l.level = level
+}
+
+// SetName updates the logger name for future logs
+func (l *Logger) SetName(name string) {
+	l.name = name
 }
 
 // Trace logs a trace statement
@@ -98,6 +105,7 @@ func (l *Logger) Fatal(format string, a ...interface{}) {
 // Default level is INFO
 func NewLogger() *Logger {
 	return &Logger{
+		name:        "",
 		level:       INFO,
 		trace:       color.New(color.FgBlue).SprintFunc(),
 		debug:       color.New(color.FgGreen).SprintFunc(),
